@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+ <!-- http://t.co/dKP3o1e -->
+ <meta name="HandheldFriendly" content="True">
+ <meta name="MobileOptimized" content="320">
+
+
+  <title>CRM-CLVP Analytics</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="jquery.csv.min.js"></script>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 550px}
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* On small screens, set height to 'auto' for the grid */
+    @media screen and (max-width: 767px) {
+      .row.content {height: auto;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse visible-xs">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Dashboard</a></li>
+        <li><a href="#">Age</a></li>
+        <li><a href="#">Gender</a></li>
+        <li><a href="#">Geo</a></li>
+        <li><a href="http://ammii.org/SuiteCRM">SuiteCRM</a></li>
+        <li><a href="http://ammii.org/doublej">DoubleJ</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-3 sidenav hidden-xs">
+      <h2>Logo</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="#section1">Dashboard</a></li>
+        <li><a href="#section2">Age</a></li>
+        <li><a href="#section3">Gender</a></li>
+        <li><a href="#section3">Geo</a></li>
+      </ul><br>
+    </div>
+    <br>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+    /*
+    function drawVisualization() {
+       $.get("ifr.csv", function(csvString) {
+          // transform the CSV string into a 2-dimensional array
+          var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
+
+          // this new DataTable object holds all the data
+          var data = new google.visualization.arrayToDataTable(arrayData);
+          // CAPACITY - En-route ATFM delay - YY - CHART
+          var crt_ertdlyYY = new google.visualization.ChartWrapper({
+             chartType: 'LineChart',
+             containerId: 'crt_ertdlyYY',
+             dataTable: data,
+             options:{
+                width: 450, height: 160,
+                title: 'EU-wide en-route ATFM delays (year to date)',
+                titleTextStyle : {color: 'grey', fontSize: 11},
+             }
+          });
+          crt_ertdlyYY.draw();
+       });
+    }
+    */
+    function drawChart() {
+       $.get("/output/revenue_gender.csv", function(csvString) {
+          // transform the CSV string into a 2-dimensional array
+          var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
+
+          // this new DataTable object holds all the data
+          var data = new google.visualization.arrayToDataTable(arrayData);
+          // CAPACITY - En-route ATFM delay - YY - CHART
+          /*
+          var crt_ertdlyYY = new google.visualization.ChartWrapper({
+             chartType: 'LineChart',
+             containerId: 'crt_ertdlyYY',
+             dataTable: data,
+             options:{
+                width: 450, height: 160,
+                title: 'Country Revenue',
+                titleTextStyle : {color: 'grey', fontSize: 11},
+             }
+          });
+          crt_ertdlyYY.draw();
+          */
+          var options = {
+            title: 'Country-Revenue',
+            pieHole: 0.4,
+          };
+
+          var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+          chart.draw(data, options);
+          //crt_ertdlyYY.draw(data, options);
+
+       });
+    }
+    google.setOnLoadCallback(drawCountryRevenueVisualization)
+    </script>
+    <div class="col-sm-9">
+      <div class="well">
+        <h4>Dashboard</h4>
+        <div  id="crt_ertdlyYY">
+          <script type="text/javascript"> // load the visualisation API
+            google.load('visualization', '1', { packages: ['corechart', 'controls'] });
+          </script>
+        </div>
+        <div id="donutchart" style="width: 900px; height: 500px;">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Users</h4>
+            <p>1 Million</p>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Pages</h4>
+            <p>100 Million</p>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Sessions</h4>
+            <p>10 Million</p>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <h4>Bounce</h4>
+            <p>30%</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Text</p>
+            <p>Text</p>
+            <p>Text</p>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Text</p>
+            <p>Text</p>
+            <p>Text</p>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Text</p>
+            <p>Text</p>
+            <p>Text</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="well">
+            <p>Text</p>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="well">
+            <p>Text</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

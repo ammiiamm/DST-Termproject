@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+ <!-- http://t.co/dKP3o1e -->
+ <meta name="HandheldFriendly" content="True">
+ <meta name="MobileOptimized" content="320">
+
+
+  <title>CRM-CLVP Analytics</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="jquery.csv.min.js"></script>
+  <script type="text/javascript" src="/js/fancybox/jquery.easing-1.3.pack.js"></script>
+	<script type="text/javascript" src="/js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+	<script type="text/javascript" src="/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+	<link rel="stylesheet" type="text/css" href="/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 550px}
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* On small screens, set height to 'auto' for the grid */
+    @media screen and (max-width: 767px) {
+      .row.content {height: auto;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse visible-xs">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">CLV</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Dashboard</a></li>
+        <li><a href="#">Age</a></li>
+        <li><a href="#">Gender</a></li>
+        <li><a href="#">Geo</a></li>
+        <li><a href="#">Campaign</a></li>
+        <li><a href="http://ammii.org/SuiteCRM">SuiteCRM</a></li>
+        <li><a href="http://ammii.org/doublej">DoubleJ</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart","geochart"]});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+       //Revenue & Age
+       $.get("/dst/output/revenue_age.csv", function(csvString) {
+          var arrayRevAgeData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
+          // this new DataTable object holds all the data
+          var RevAgedata = new google.visualization.arrayToDataTable(arrayRevAgeData);
+          var RevAgeoptions = {
+            title: 'Revenue and Age',
+            backgroundColor: { fill:'transparent' }
+          };
+          var RevAgechart = new google.visualization.PieChart(document.getElementById('donutRevAgechart'));
+          RevAgechart.draw(RevAgedata, RevAgeoptions);
+       });
+
+}
+    </script>
+<div class="container-fluid">
+              <div id="donutRevAgechart" style="width: 100%; height: 100%"></div>
+</div>
+
+</body>
+</html>
